@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {pages} from "./pageConstants.js"
 
-var loadPage = pages.IMPORT_DATA_PAGE;
+var loadPage = pages.SYSTEM_PREDICTION_PAGE//IMPORT_DATA_PAGE;
 ReactDOM.render(<App pageName={loadPage}/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

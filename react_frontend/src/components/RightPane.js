@@ -6,6 +6,7 @@ import RPCImportData from './RPCImportData'
 class RightPane extends Component {
     //the content to display
     content = null;
+
     
     constructor (props) {
         super (props);
@@ -14,6 +15,7 @@ class RightPane extends Component {
             content: this.props.content,
             title: this.props.title,
         }
+        console.log(this.props);
 
         this.displayNewContent = this.displayNewContent.bind(this);
     }

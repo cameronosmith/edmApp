@@ -36,7 +36,6 @@ class LPCParameters extends Component {
         this.props.callbackFunction(this.state); 
     }
 
-
     /*function to generate the html of a parameter input
      * @param paramName: the name of the parameter to generate
      * @return: the html for that param
@@ -80,8 +79,6 @@ class LPCParameters extends Component {
       );
   }
 }
-
-
 
 //style constants
 /* styling */

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import axios from 'axios'
+import React, { Component } from 'react'
 import RootContainer from "./components/RootContainer"
 import Header from "./components/Header"
 import LeftPane from "./components/LeftPane"
@@ -10,11 +11,21 @@ import LPCParameters from './components/LPCParameters'
 //constants for the pages
 import {pages} from "./pageConstants.js"
 //constants for the page titles/headers
-const importDataPageTitle = "importing data / choose analysis focus";
-const systemPredictionPageTitle = "system prediction";
-const generalParametersTitle = "parameters";
+const importDataPageTitle = "importing data / choose analysis focus"
+const systemPredictionPageTitle = "system prediction"
+const generalParametersTitle = "parameters"
+//const for http requests
+const serverUrl = "http://localhost:5000";
+
+
+var createClass = require('create-react-class');
 
 class App extends Component {
+
+    //use for http requests
+    http = axios.create({
+        baseURL: serverUrl
+    }); 
 
     constructor(props) {
         super(props);
@@ -27,14 +38,20 @@ class App extends Component {
         LPC: <LPCParameters callbackFunction={this.handleProgramParams} />
     }
 
-    /* functions to render each page
+    /* function to render the import data page 
      * side effects: populates the pageObj object
      * @return: none
      * */
     importDataPage () {
         this.pageObj.rightPaneTitle = importDataPageTitle;
-        this.pageObj.RPC = <RPCImportData callbackFunction={this.receieveImportData}/>;
+        this.pageObj.RPC = <RPCImportData 
+            callbackFunction={this.receieveImportData} http={this.http}/>;
     }
+    /* function to render the system prediction page
+     * @param lpcParams: the params pane to get the state obj
+     * side effects: populates the pageObj object
+     * @return: none
+     * */
     systemPredictionPage () {
         this.pageObj.rightPaneTitle = systemPredictionPageTitle;
         this.pageObj.RPC = <RPCSysPrediction />;
@@ -50,9 +67,21 @@ class App extends Component {
         console.log(data);
         //set up sys prediction content
         this.systemPredictionPage();
-        console.log(this.pageObj.RPC)
         this.RPCInstance.displayNewContent(this.pageObj);
     }
+
+    /* store the left pane so we can pass it into the right pane if needed
+     * @return: the left pane stored in the caller variable
+     * */
+    
+    leftPane= createClass({
+        render: function() {
+            return (<LeftPane title={this.pageObj.leftPaneTitle} 
+                    content={this.pageObj.LPC}></LeftPane>
+            )
+        }
+    });
+
 
     //load the app
     render() {
@@ -72,8 +101,8 @@ class App extends Component {
         return (
             <RootContainer>
             <Header/>
-            <LeftPane title={this.pageObj.leftPaneTitle} content={this.pageObj.LPC}></LeftPane>
-            <RightPane ref={instance => { this.RPCInstance = instance; }} 
+            <leftPane/>
+            <RightPane ref={instance => { this.RPCInstance = instance; } }  lp={this.LPCInstance}
                 title={this.pageObj.rightPaneTitle} content={this.pageObj.RPC}>
             </RightPane>
             </RootContainer>

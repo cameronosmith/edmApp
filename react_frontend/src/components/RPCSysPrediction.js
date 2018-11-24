@@ -5,7 +5,9 @@ import EmbeddingPlot from "./EmbeddingPlot";
 /* the actual right pane content element */
 class RPCSysPrediction extends Component {
     render() {
+        console.log(this.props.title)
         return (
+        <div>
             <div style={upperDisplay}>
                 <div style={graphContainer}>
                     <EmbeddingPlot width={graphWidth} height={graphHeight}/>
@@ -14,6 +16,8 @@ class RPCSysPrediction extends Component {
                     <EmbeddingPlot width={graphWidth} height={graphHeight}/>
                 </div>
             </div>
+            <a style={chooseEmbeddingStyle}> Choose optimal embedding dimension </a>
+        </div>
         );
     }
 }
@@ -31,6 +35,9 @@ const graphContainer = {
     width: graphWidth+"px",
     height: graphHeight+"px",
 }
-
+const chooseEmbeddingStyle = {
+    fontSize: '20px',
+    fontFamily: 'arial',
+}
 
 export default RPCSysPrediction;
