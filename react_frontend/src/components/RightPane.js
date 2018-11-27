@@ -7,7 +7,6 @@ class RightPane extends Component {
     //the content to display
     content = null;
 
-    
     constructor (props) {
         super (props);
         this.content = this.props.content;
@@ -15,7 +14,6 @@ class RightPane extends Component {
             content: this.props.content,
             title: this.props.title,
         }
-        console.log(this.props);
 
         this.displayNewContent = this.displayNewContent.bind(this);
     }
@@ -24,7 +22,6 @@ class RightPane extends Component {
      * */
     displayNewContent (pageObj) {
         this.content = null; 
-        console.log(pageObj.title);
         this.setState({
                 ['title']: pageObj.rightPaneTitle,
                 ['content'] : pageObj.RPC,

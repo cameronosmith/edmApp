@@ -7,6 +7,7 @@ const fileButtonId = 'fileBtn'
 
 /* the actual right pane content element */
 class RPCImportData extends Component {
+
     constructor (props) {
         super (props);
         this.state = {
@@ -15,7 +16,6 @@ class RPCImportData extends Component {
             selectedFile: "sampleDatafile"
         }
         this.sysPredictionButton = this.sysPredictionButton.bind(this);
-        this.giveBackendDatafile = this.giveBackendDatafile.bind(this);
         this.giveBackendDatafile = this.giveBackendDatafile.bind(this);
     }
     

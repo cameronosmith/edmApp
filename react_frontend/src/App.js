@@ -18,6 +18,7 @@ const generalParametersTitle = "parameters"
 const serverUrl = "http://localhost:5000";
 
 
+//to call the createClass function
 var createClass = require('create-react-class');
 
 class App extends Component {
@@ -29,13 +30,13 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.handleProgramParams = this.handleProgramParams.bind(this);
         this.receieveImportData = this.receieveImportData.bind(this);
+        this.getParamsObj = this.getParamsObj.bind(this);
     }
 
     //the page object to be stored by which page selected
     pageObj = {rightPaneTitle:'',leftPaneTitle: generalParametersTitle, 
-        LPC: <LPCParameters callbackFunction={this.handleProgramParams} />
+        LPC: <LPCParameters http={this.http} />
     }
 
     /* function to render the import data page 
@@ -48,40 +49,29 @@ class App extends Component {
             callbackFunction={this.receieveImportData} http={this.http}/>;
     }
     /* function to render the system prediction page
-     * @param lpcParams: the params pane to get the state obj
      * side effects: populates the pageObj object
      * @return: none
      * */
-    systemPredictionPage () {
+    systemPredictionPage (lpcParams) {
         this.pageObj.rightPaneTitle = systemPredictionPageTitle;
-        this.pageObj.RPC = <RPCSysPrediction />;
-    }
-
-    /* function to get the fine tuning params from the params pane */
-    handleProgramParams (data) {
-        console.log(data);
+        this.pageObj.RPC = <RPCSysPrediction paramsRequest={this.getParamsObj} 
+             http={this.http}/>;
     }
 
     /* function to set up the prediction page and receive the user import data */
     receieveImportData (data) {
-        console.log(data);
+        console.log("received import data");
         //set up sys prediction content
         this.systemPredictionPage();
         this.RPCInstance.displayNewContent(this.pageObj);
     }
 
-    /* store the left pane so we can pass it into the right pane if needed
-     * @return: the left pane stored in the caller variable
+    /* function to send the parameters object to any child 
+     * @return: the state parameters object
      * */
-    
-    leftPane= createClass({
-        render: function() {
-            return (<LeftPane title={this.pageObj.leftPaneTitle} 
-                    content={this.pageObj.LPC}></LeftPane>
-            )
-        }
-    });
-
+    getParamsObj () {
+        console.log(this.pageObj.LPC.props.callbackFunction())
+    }
 
     //load the app
     render() {
@@ -97,12 +87,13 @@ class App extends Component {
                 alert("page passed in not found");
                 break;
         }
-
+        
         return (
             <RootContainer>
             <Header/>
-            <leftPane/>
-            <RightPane ref={instance => { this.RPCInstance = instance; } }  lp={this.LPCInstance}
+            <LeftPane ref={instance => { this.LPCInstance = instance}} 
+                title={this.pageObj.leftPaneTitle} content={this.pageObj.LPC}/>
+            <RightPane ref={instance => { this.RPCInstance = instance; } }  
                 title={this.pageObj.rightPaneTitle} content={this.pageObj.RPC}>
             </RightPane>
             </RootContainer>

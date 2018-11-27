@@ -4,21 +4,18 @@ import InfoIcon from './InfoIcon'
 
 /* the actual parameters pane element */
 class LPCParameters extends Component {
+
     constructor(props) {
         super(props);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.generateParamHtml = this.generateParamHtml.bind(this);
-        this.passStateUp = this.passStateUp.bind(this);
+        this.updateParams = this.updateParams.bind(this);
 
-        this.state = {
-            E: "3",
-            tau: "1",
-            num_neighbors: "1",
-            tp: "1",
-            lib: "1",
-            pred: "1",
-            exlusion_radius: "1",
-        }
+        
+        this.props.http.post ('/requestParameters', {}).then((result) => {
+            this.setState(result.data.parameters)
+        })
+
     }
     /* function to handle the change on a parameter field
      * @param event: 
@@ -26,14 +23,12 @@ class LPCParameters extends Component {
     handleInputChange(event) {
         this.setState({
             [event.target.name]: event.target.value
-        }, this.passStateUp);
-        //pass params back to app
-        this.props.callbackFunction(this.state);
+        }, this.updateParams);
     }
 
     /* function to pass the param data back up to the app */
-    passStateUp(){
-        this.props.callbackFunction(this.state); 
+    updateParams(){
+        this.props.http.post ('/updateParameters', {parameters: this.state})
     }
 
     /*function to generate the html of a parameter input
